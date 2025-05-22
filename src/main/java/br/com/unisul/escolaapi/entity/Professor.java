@@ -15,7 +15,7 @@ public class Professor {
     @Id
     @Column
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     @Column(name = "dt_criacao")
     private LocalDateTime dataDeCriacao;
