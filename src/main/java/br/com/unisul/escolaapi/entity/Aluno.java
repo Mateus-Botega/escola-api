@@ -1,14 +1,17 @@
 package br.com.unisul.escolaapi.entity;
 
+import br.com.unisul.escolaapi.dto.AlunoDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "alunos")
 public class Aluno {
 
@@ -36,5 +39,14 @@ public class Aluno {
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "A turma não pode ser nula")
     private Turma turma;
+
+    public Aluno(AlunoDTO dto) {
+        this.id = dto.getId();
+        this.nomeCompleto = dto.getNomeCompleto();
+        this.dataDeCriacao = LocalDateTime.now();
+        this.dataDeNascimento = dto.getDataDeNascimento();
+        this.matricula = dto.getMatricula();
+        this.turma = new Turma(dto.getTurma());
+    }
 
 }
