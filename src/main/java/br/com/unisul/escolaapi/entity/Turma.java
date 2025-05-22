@@ -1,5 +1,6 @@
 package br.com.unisul.escolaapi.entity;
 
+import br.com.unisul.escolaapi.dto.TurmaDTO;
 import br.com.unisul.escolaapi.entity.enums.Turno;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -41,5 +43,14 @@ public class Turma {
             inverseJoinColumns = @JoinColumn(name = "id_professor")
     )
     private List<Professor> professores;
+
+    public Turma(TurmaDTO dto) {
+        this.id = dto.getId();
+        this.nome = dto.getNome();
+        this.turno = Turno.valueOf(dto.getTurno());
+        this.dataDeCriacao = LocalDateTime.now();
+        this.alunos = new ArrayList<>();
+        this.professores = new ArrayList<>();
+    }
 
 }
