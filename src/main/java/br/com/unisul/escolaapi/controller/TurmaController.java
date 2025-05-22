@@ -17,7 +17,7 @@ public class TurmaController {
     @Autowired
     private TurmaService turmaService;
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<?> buscarPor(@PathVariable("id") Long id) {
         Turma turma = turmaService.buscarPor(id);
         return ResponseEntity.ok(turma);
