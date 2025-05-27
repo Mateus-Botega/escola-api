@@ -2,6 +2,7 @@ package br.com.unisul.escolaapi.entity;
 
 import br.com.unisul.escolaapi.dto.ProfessorDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,14 +19,14 @@ public class Professor {
 
     @Id
     @Column
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "dt_criacao")
     private LocalDateTime dataDeCriacao;
 
     @Column(name = "nome_completo")
-    @NotNull(message = "O nome completo não pode ser nulo")
+    @NotBlank(message = "O nome completo não pode ser nulo")
     private String nomeCompleto;
 
     @Column(name = "dt_nascimento")
