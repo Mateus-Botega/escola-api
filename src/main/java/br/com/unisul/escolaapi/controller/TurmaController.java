@@ -1,7 +1,6 @@
 package br.com.unisul.escolaapi.controller;
 
 import br.com.unisul.escolaapi.dto.TurmaDTO;
-import br.com.unisul.escolaapi.entity.Turma;
 import br.com.unisul.escolaapi.service.TurmaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,29 +10,32 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/turma")
+@RequestMapping("/turmas")
 public class TurmaController {
 
     @Autowired
-    private TurmaService turmaService;
+    private TurmaService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPor(@PathVariable("id") Long id) {
-        Turma turma = turmaService.buscarPor(id);
-        return ResponseEntity.ok(turma);
+    public ResponseEntity<TurmaDTO> buscarPor(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(service.buscarPor(id));
     }
 
     @GetMapping
-    public ResponseEntity<?> listarPor(@RequestParam("filtro") String filtro) {
-        List<Turma> turmas = turmaService.listarPor(filtro);
-        return ResponseEntity.ok(turmas);
+    public ResponseEntity<List<TurmaDTO>> listarPor(@RequestParam("filtro") String filtro) {
+        return ResponseEntity.ok(service.listarPor(filtro));
     }
 
     @PostMapping
-    public ResponseEntity<?> salvar(TurmaDTO turmaDTO) {
-        turmaService.salvar(turmaDTO);
-        //buscar o salvo e retornar
-        return ResponseEntity.created(URI.create(null)).build();
+    public ResponseEntity<TurmaDTO> inserir(TurmaDTO turmaDTO) {
+        TurmaDTO novaTurma = service.inserir(turmaDTO);
+        return ResponseEntity.created(URI.create("/turmas/" + novaTurma.getId())).build();
+    }
+
+    @PutMapping
+    public ResponseEntity<TurmaDTO> alterar(TurmaDTO turmaDTO) {
+        TurmaDTO turmaSalva = service.alterar(turmaDTO);
+        return ResponseEntity.ok(turmaSalva);
     }
 
 }

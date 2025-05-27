@@ -14,22 +14,25 @@ public class TurmaService {
     @Autowired
     private TurmaRepository turmaRepository;
 
-    public List<Turma> listarPor(String filtro) {
+    public List<TurmaDTO> listarPor(String filtro) {
         String filtroParaListagem = "%" + filtro + "%";
-        return turmaRepository.listarPor(filtroParaListagem);
+        List<Turma> turmasEncontradas = turmaRepository.listarPor(filtroParaListagem);
+        return turmasEncontradas.stream().map(TurmaDTO::new).toList();
     }
 
-    public Turma buscarPor(Long id) {
-        return turmaRepository.buscarPor(id);
+    public TurmaDTO buscarPor(Long id) {
+        Turma turma = turmaRepository.buscarPor(id);
+        return new TurmaDTO(turma);
     }
 
-    public void salvar(TurmaDTO turmaDTO) {
-        Turma turma = converterParaEntidade(turmaDTO);
-        turmaRepository.save(turma);
+    public TurmaDTO inserir(TurmaDTO turmaDTO) {
+        Turma turma = turmaRepository.save(new Turma(turmaDTO));
+        return new TurmaDTO(turma);
     }
 
-    private Turma converterParaEntidade(TurmaDTO turmaDTO) {
-        return new Turma(turmaDTO);
+    public TurmaDTO alterar(TurmaDTO turmaDTO) {
+        Turma turma = turmaRepository.save(new Turma(turmaDTO));
+        return new TurmaDTO(turma);
     }
 
 }
