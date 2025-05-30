@@ -17,13 +17,13 @@ public class AlunoController {
     public AlunoService service;
 
     @PostMapping
-    public ResponseEntity<AlunoDTO> inserir(AlunoDTO aluno) {
+    public ResponseEntity<AlunoDTO> inserir(@RequestBody AlunoDTO aluno) {
         AlunoDTO novoAluno = service.inserir(aluno);
         return ResponseEntity.created(URI.create("/alunos/" + novoAluno.getId())).build();
     }
 
     @PutMapping
-    public ResponseEntity<AlunoDTO> alterar(AlunoDTO aluno) {
+    public ResponseEntity<AlunoDTO> alterar(@RequestBody AlunoDTO aluno) {
         AlunoDTO alunoSalvo = service.alterar(aluno);
         return ResponseEntity.ok(alunoSalvo);
     }

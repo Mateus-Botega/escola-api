@@ -1,6 +1,7 @@
 package br.com.unisul.escolaapi.service;
 
 import br.com.unisul.escolaapi.entity.Aluno;
+import br.com.unisul.escolaapi.entity.Turma;
 import br.com.unisul.escolaapi.repository.AlunoRepository;
 import br.com.unisul.escolaapi.dto.AlunoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,11 @@ public class AlunoService {
 
     public List<AlunoDTO> listarPor(String filtro) {
         List<Aluno> alunos = repository.listarPor("%" + filtro + "%");
+        return alunos.stream().map(AlunoDTO::new).toList();
+    }
+
+    public List<AlunoDTO> listarPor(Turma turma) {
+        List<Aluno> alunos = repository.listarPor(turma);
         return alunos.stream().map(AlunoDTO::new).toList();
     }
 

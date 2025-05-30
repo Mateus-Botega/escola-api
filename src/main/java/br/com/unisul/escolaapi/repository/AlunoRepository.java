@@ -1,6 +1,7 @@
 package br.com.unisul.escolaapi.repository;
 
 import br.com.unisul.escolaapi.entity.Aluno;
+import br.com.unisul.escolaapi.entity.Turma;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -28,5 +29,10 @@ public interface AlunoRepository extends JpaRepository<Aluno, Integer> {
             "WHERE upper(a.nomeCompleto) LIKE upper(:filtro)" +
             "OR upper(a.matricula) LIKE upper(:filtro)")
     List<Aluno> listarPor(String filtro);
+
+    @Query("SELECT a " +
+            "FROM Aluno a " +
+            "WHERE a.turma = :turma")
+    List<Aluno> listarPor(Turma turma);
 
 }

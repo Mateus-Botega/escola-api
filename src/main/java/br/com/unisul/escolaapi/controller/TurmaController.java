@@ -27,13 +27,13 @@ public class TurmaController {
     }
 
     @PostMapping
-    public ResponseEntity<TurmaDTO> inserir(TurmaDTO turmaDTO) {
+    public ResponseEntity<TurmaDTO> inserir(@RequestBody TurmaDTO turmaDTO) {
         TurmaDTO novaTurma = service.inserir(turmaDTO);
         return ResponseEntity.created(URI.create("/turmas/" + novaTurma.getId())).build();
     }
 
     @PutMapping
-    public ResponseEntity<TurmaDTO> alterar(TurmaDTO turmaDTO) {
+    public ResponseEntity<TurmaDTO> alterar(@RequestBody TurmaDTO turmaDTO) {
         TurmaDTO turmaSalva = service.alterar(turmaDTO);
         return ResponseEntity.ok(turmaSalva);
     }

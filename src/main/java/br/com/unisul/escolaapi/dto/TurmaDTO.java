@@ -1,7 +1,6 @@
 package br.com.unisul.escolaapi.dto;
 
 import br.com.unisul.escolaapi.entity.Turma;
-import br.com.unisul.escolaapi.entity.enums.Turno;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -2,6 +2,7 @@ package br.com.unisul.escolaapi.service;
 
 import br.com.unisul.escolaapi.dto.ProfessorDTO;
 import br.com.unisul.escolaapi.entity.Professor;
+import br.com.unisul.escolaapi.entity.Turma;
 import br.com.unisul.escolaapi.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,11 @@ public class ProfessorService {
     public List<ProfessorDTO> listarPor(String nome) {
         String filtroParaNome = "%" + nome + "%";
         List<Professor> professores = repository.listarPor(filtroParaNome);
+        return professores.stream().map(ProfessorDTO::new).toList();
+    }
+
+    public List<ProfessorDTO> listarPor(Turma turma) {
+        List<Professor> professores = repository.listarPor(turma);
         return professores.stream().map(ProfessorDTO::new).toList();
     }
 

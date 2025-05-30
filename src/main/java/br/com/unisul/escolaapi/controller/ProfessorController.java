@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.directory.SearchResult;
 import java.net.URI;
 import java.util.List;
 
@@ -18,13 +17,13 @@ public class ProfessorController {
     private ProfessorService service;
 
     @PostMapping
-    public ResponseEntity<ProfessorDTO> inserir(ProfessorDTO professorDTO) {
+    public ResponseEntity<ProfessorDTO> inserir(@RequestBody ProfessorDTO professorDTO) {
         ProfessorDTO novoProfessor = service.inserir(professorDTO);
         return ResponseEntity.created(URI.create("/professores/" + novoProfessor.getId())).build();
     }
 
     @PutMapping
-    public ResponseEntity<ProfessorDTO> alterar(ProfessorDTO professorDTO) {
+    public ResponseEntity<ProfessorDTO> alterar(@RequestBody ProfessorDTO professorDTO) {
         ProfessorDTO professorSalvo = service.alterar(professorDTO);
         return ResponseEntity.ok(professorSalvo);
     }
@@ -35,7 +34,7 @@ public class ProfessorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProfessorDTO>> listarPor(String nome) {
+    public ResponseEntity<List<ProfessorDTO>> listarPor(@RequestParam("filtro")  String nome) {
         return ResponseEntity.ok(service.listarPor(nome));
     }
 
