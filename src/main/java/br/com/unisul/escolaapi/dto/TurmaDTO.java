@@ -23,8 +23,8 @@ public class TurmaDTO {
         this.nome = turma.getNome();
         this.dataDeCriacao = turma.getDataDeCriacao();
         this.turno = String.valueOf(turma.getTurno());
-        this.professores = turma.getProfessores().stream().map(ProfessorDTO::new).toList();
-        this.alunos = turma.getAlunos().stream().map(AlunoDTO::new).toList();
+        if (professores != null) this.professores = turma.getProfessores().stream().map(ProfessorDTO::new).toList();
+        if (alunos != null) this.alunos = turma.getAlunos().stream().map(AlunoDTO::new).toList();
     }
 
 }

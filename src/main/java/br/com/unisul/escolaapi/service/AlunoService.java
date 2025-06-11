@@ -1,13 +1,15 @@
 package br.com.unisul.escolaapi.service;
 
+import br.com.unisul.escolaapi.dto.AlunoDTO;
 import br.com.unisul.escolaapi.entity.Aluno;
 import br.com.unisul.escolaapi.entity.Turma;
 import br.com.unisul.escolaapi.repository.AlunoRepository;
-import br.com.unisul.escolaapi.dto.AlunoDTO;
+import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AlunoService {
@@ -17,23 +19,34 @@ public class AlunoService {
 
     public AlunoDTO inserir(AlunoDTO aluno) {
         validar(aluno);
-        Aluno alunoSalvo = repository.save(new Aluno(aluno));
-        return new AlunoDTO(alunoSalvo);
+        return new AlunoDTO(repository.save(new Aluno(aluno)));
     }
 
     public AlunoDTO alterar(AlunoDTO aluno) {
+        Aluno alunoExistente = repository.buscarPor(aluno.getId());
+        if (alunoExistente == null) {
+            throw new IllegalArgumentException("O aluno '" + aluno.getId() + "' não existe.");
+        }
         validar(aluno);
-        Aluno alunoAlterado = repository.save(new Aluno(aluno));
-        return new AlunoDTO(alunoAlterado);
+        alunoExistente.setNomeCompleto(aluno.getNomeCompleto());
+        alunoExistente.setMatricula(aluno.getMatricula());
+        alunoExistente.setDataDeNascimento(aluno.getDataDeNascimento());
+        alunoExistente.setTurma(new Turma(aluno.getTurma()));
+        return new AlunoDTO(repository.saveAndFlush(alunoExistente));
     }
 
     public AlunoDTO buscarPor(Long id) {
-        Aluno alunoSalvo = repository.buscarPor(id);
-        return new AlunoDTO(alunoSalvo);
+        Aluno alunoSalvo = Optional.ofNullable(repository.buscarPor(id))
+                .orElseThrow(() -> new NoResultException("O aluno '" + id + "' não existe."));
+        AlunoDTO dto = new AlunoDTO(alunoSalvo);
+        dto.getTurma().setAlunos(null);
+        return dto;
     }
 
     public AlunoDTO buscarPor(String matricula) {
-        Aluno alunoSalvo = repository.buscarPor(matricula);
+        Aluno alunoSalvo = Optional.ofNullable(repository.buscarPor(matricula))
+                .orElseThrow(() -> new NoResultException("A matrícula '" + matricula + "' não existe."));
+        alunoSalvo.getTurma().setAlunos(null);
         return new AlunoDTO(alunoSalvo);
     }
 
@@ -48,10 +61,9 @@ public class AlunoService {
     }
 
     private void validar(AlunoDTO aluno) {
-        String matricula = aluno.getMatricula();
-        Aluno alunoSalvo = repository.buscarPor(matricula);
+        Aluno alunoSalvo = repository.buscarPor(aluno.getMatricula());
 
-        if (alunoSalvo != null && alunoSalvo.getId().equals(aluno.getId())) {
+        if (alunoSalvo != null && !alunoSalvo.getId().equals(aluno.getId())) {
             throw new IllegalArgumentException("A matrícula não deve ser repetida");
         }
     }

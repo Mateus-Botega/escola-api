@@ -1,13 +1,17 @@
 package br.com.unisul.escolaapi.service;
 
 import br.com.unisul.escolaapi.dto.ProfessorDTO;
+import br.com.unisul.escolaapi.dto.TurmaDTO;
 import br.com.unisul.escolaapi.entity.Professor;
 import br.com.unisul.escolaapi.entity.Turma;
 import br.com.unisul.escolaapi.repository.ProfessorRepository;
+import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProfessorService {
@@ -21,13 +25,24 @@ public class ProfessorService {
     }
 
     public ProfessorDTO alterar(ProfessorDTO professorDTO) {
-        Professor professorSalvo = repository.save(new Professor(professorDTO));
-        return new ProfessorDTO(professorSalvo);
+        Professor professorExistente = repository.buscarPor(professorDTO.getId());
+        if (professorExistente == null) {
+            throw new IllegalArgumentException("O professor '" + professorDTO.getId() + "' não existe.");
+        }
+        professorExistente.setNomeCompleto(professorDTO.getNomeCompleto());
+        professorExistente.setDataDeNascimento(professorDTO.getDataDeNascimento());
+        professorExistente.setTurmas(professorDTO.getTurmas().stream().map(Turma::new).collect(Collectors.toList()));
+        return new ProfessorDTO(repository.saveAndFlush(professorExistente));
     }
 
     public ProfessorDTO buscarPor(Long id) {
-        Professor professor = repository.buscarPor(id);
-        return new ProfessorDTO(professor);
+        Professor professor = Optional.ofNullable(repository.buscarPor(id))
+                .orElseThrow(() -> new NoResultException("O professor '" + id + "' não existe."));
+        ProfessorDTO dto = new ProfessorDTO(professor);
+        for (TurmaDTO turma : dto.getTurmas()) {
+            turma.setProfessores(null);
+        }
+        return dto;
     }
 
     public List<ProfessorDTO> listarPor(String nome) {

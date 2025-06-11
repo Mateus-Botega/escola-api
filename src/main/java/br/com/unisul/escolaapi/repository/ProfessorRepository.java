@@ -25,6 +25,6 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
     @Query("SELECT p " +
             "FROM Professor p " +
             "WHERE :turma MEMBER OF p.turmas")
-    List<Professor> listarPor(@Param("nome")Turma turma);
+    List<Professor> listarPor(Turma turma);
 
 }

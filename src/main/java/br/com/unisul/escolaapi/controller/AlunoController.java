@@ -33,7 +33,7 @@ public class AlunoController {
         return ResponseEntity.ok(service.buscarPor(id));
     }
 
-    @GetMapping("/{matricula}")
+    @GetMapping("/matricula/{matricula}")
     public ResponseEntity<AlunoDTO> buscarAlunoPor(@PathVariable("matricula") String matricula) {
         return ResponseEntity.ok(service.buscarPor(matricula));
     }

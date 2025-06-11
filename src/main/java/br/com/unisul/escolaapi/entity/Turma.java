@@ -38,18 +38,13 @@ public class Turma {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "turma")
     private List<Aluno> alunos;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "professores_turmas",
-            joinColumns = @JoinColumn(name = "id_turma"),
-            inverseJoinColumns = @JoinColumn(name = "id_professor")
-    )
+    @ManyToMany(mappedBy = "turmas", fetch = FetchType.LAZY)
     private List<Professor> professores;
 
     public Turma(TurmaDTO dto) {
         this.id = dto.getId();
         this.nome = dto.getNome();
-        this.turno = Turno.valueOf(dto.getTurno());
+        if (dto.getTurno() != null) this.turno = Turno.valueOf(dto.getTurno());
         this.dataDeCriacao = LocalDateTime.now();
         this.alunos = new ArrayList<>();
         this.professores = new ArrayList<>();

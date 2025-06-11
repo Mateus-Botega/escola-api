@@ -33,7 +33,12 @@ public class Professor {
     @NotNull(message = "A data de nascimento não pode ser nula")
     private LocalDate dataDeNascimento;
 
-    @ManyToMany(mappedBy = "professores", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "professores_turmas",
+            joinColumns = @JoinColumn(name = "id_professor"),
+            inverseJoinColumns = @JoinColumn(name = "id_turma")
+    )
     private List<Turma> turmas;
 
     public Professor(ProfessorDTO dto) {
