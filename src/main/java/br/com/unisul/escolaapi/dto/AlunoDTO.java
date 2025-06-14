@@ -1,6 +1,7 @@
 package br.com.unisul.escolaapi.dto;
 
 import br.com.unisul.escolaapi.entity.Aluno;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,8 +25,10 @@ public class AlunoDTO {
 
     private String nomeCompleto;
 
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataDeCriacao;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataDeNascimento;
 
     private String matricula;

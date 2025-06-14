@@ -1,6 +1,7 @@
 package br.com.unisul.escolaapi.dto;
 
 import br.com.unisul.escolaapi.entity.Professor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +15,12 @@ public class ProfessorDTO {
 
     private Long id;
 
+    @JsonFormat(pattern = "dd/MM/yyyy hh:mm")
     private LocalDateTime dataDeCriacao;
 
     private String nomeCompleto;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataDeNascimento;
 
     private List<TurmaDTO> turmas;

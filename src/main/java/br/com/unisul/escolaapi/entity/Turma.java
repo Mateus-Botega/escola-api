@@ -35,7 +35,7 @@ public class Turma {
     @Column(name = "dt_criacao")
     private LocalDateTime dataDeCriacao;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "turma")
+    @OneToMany(mappedBy = "turma", fetch = FetchType.LAZY)
     private List<Aluno> alunos;
 
     @ManyToMany(mappedBy = "turmas", fetch = FetchType.LAZY)

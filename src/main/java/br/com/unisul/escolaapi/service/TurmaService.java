@@ -44,6 +44,8 @@ public class TurmaService {
     }
 
     public TurmaDTO alterar(TurmaDTO turmaDTO) {
+        if (turmaDTO.getId() == null)
+            throw new IllegalArgumentException("O id da turma é obrigatório para alteração");
         Turma turmaExistente = turmaRepository.buscarPor(turmaDTO.getId());
         if (turmaExistente == null) {
             throw new IllegalArgumentException("A turma '" + turmaDTO.getId() + "' não existe.");
