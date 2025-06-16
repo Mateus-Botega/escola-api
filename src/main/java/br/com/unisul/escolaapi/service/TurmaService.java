@@ -8,6 +8,7 @@ import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,9 +25,14 @@ public class TurmaService {
     private AlunoService alunoService;
 
     public List<TurmaDTO> listarPor(String filtro) {
-        String filtroParaListagem = "%" + filtro + "%";
-        List<Turma> turmasEncontradas = turmaRepository.listarPor(filtroParaListagem);
-        return turmasEncontradas.stream().map(TurmaDTO::new).toList();
+        List<Turma> turmasEncontradas = turmaRepository.listarPor("%" + filtro + "%");
+        List<TurmaDTO> turmasDTO = turmasEncontradas.stream().map(TurmaDTO::new).toList();
+        for (TurmaDTO turmaDTO : turmasDTO) {
+            Turma turma = new Turma(turmaDTO);
+            turmaDTO.setAlunos(alunoService.listarPor(turma));
+            turmaDTO.setProfessores(professorService.listarPor(turma));
+        }
+        return turmasDTO;
     }
 
     public TurmaDTO buscarPor(Long id) {

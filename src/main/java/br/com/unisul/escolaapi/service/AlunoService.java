@@ -61,6 +61,11 @@ public class AlunoService {
     }
 
     private void validar(AlunoDTO aluno) {
+
+        if (aluno.getTurma() == null || aluno.getTurma().getId() == null) {
+            throw new IllegalArgumentException("A turma é obrigatória");
+        }
+
         Aluno alunoSalvo = repository.buscarPor(aluno.getMatricula());
 
         if (alunoSalvo != null && !alunoSalvo.getId().equals(aluno.getId())) {

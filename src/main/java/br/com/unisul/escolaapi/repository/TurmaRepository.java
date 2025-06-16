@@ -13,7 +13,7 @@ public interface TurmaRepository extends JpaRepository<Turma, Long> {
 
     @Query("SELECT t " +
             "FROM Turma t " +
-            "WHERE upper(t.nome) LIKE upper(:filtro)")
+            "WHERE Upper(t.nome) LIKE Upper(:filtro)")
     List<Turma> listarPor(@Param("filtro") String filtro);
 
 
