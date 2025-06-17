@@ -7,6 +7,7 @@ import br.com.unisul.escolaapi.entity.Turma;
 import br.com.unisul.escolaapi.repository.ProfessorRepository;
 import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public class ProfessorService {
     @Autowired
     private ProfessorRepository repository;
 
+    @Lazy
+    @Autowired
+    private TurmaService turmaService;
+
     public ProfessorDTO inserir(ProfessorDTO professorDTO) {
         validar(professorDTO);
         Professor novoProfessor = repository.save(new Professor(professorDTO));
@@ -26,6 +31,7 @@ public class ProfessorService {
     }
 
     public ProfessorDTO alterar(ProfessorDTO professorDTO) {
+        validar(professorDTO);
         if (professorDTO.getId() == null)
             throw new IllegalArgumentException("O id do professor é obrigatório para alteração");
         Professor professorExistente = repository.buscarPor(professorDTO.getId());
@@ -61,6 +67,12 @@ public class ProfessorService {
     private void validar(ProfessorDTO professorDTO) {
         if (professorDTO.getTurmas() == null || professorDTO.getTurmas().isEmpty()) {
             throw new IllegalArgumentException("A turma é obrigatória");
+        }
+
+        for (TurmaDTO turma : professorDTO.getTurmas()) {
+            TurmaDTO turmaExiste = turmaService.buscarPor(turma.getId());
+            if (turmaExiste == null)
+                throw new IllegalArgumentException("A turma '" + turmaExiste.getId() + "' não existe.");
         }
     }
 

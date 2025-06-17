@@ -2,7 +2,6 @@ package br.com.unisul.escolaapi.dto;
 
 import br.com.unisul.escolaapi.entity.Turma;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -1,11 +1,13 @@
 package br.com.unisul.escolaapi.service;
 
 import br.com.unisul.escolaapi.dto.AlunoDTO;
+import br.com.unisul.escolaapi.dto.TurmaDTO;
 import br.com.unisul.escolaapi.entity.Aluno;
 import br.com.unisul.escolaapi.entity.Turma;
 import br.com.unisul.escolaapi.repository.AlunoRepository;
 import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,10 @@ public class AlunoService {
 
     @Autowired
     private AlunoRepository repository;
+
+    @Lazy
+    @Autowired
+    private TurmaService turmaService;
 
     public AlunoDTO inserir(AlunoDTO aluno) {
         validar(aluno);
@@ -32,7 +38,8 @@ public class AlunoService {
         alunoExistente.setMatricula(aluno.getMatricula());
         alunoExistente.setDataDeNascimento(aluno.getDataDeNascimento());
         alunoExistente.setTurma(new Turma(aluno.getTurma()));
-        return new AlunoDTO(repository.saveAndFlush(alunoExistente));
+        repository.saveAndFlush(alunoExistente);
+        return buscarPor(alunoExistente.getId());
     }
 
     public AlunoDTO buscarPor(Long id) {
@@ -64,6 +71,11 @@ public class AlunoService {
 
         if (aluno.getTurma() == null || aluno.getTurma().getId() == null) {
             throw new IllegalArgumentException("A turma é obrigatória");
+        }
+
+        TurmaDTO turmaDTO = turmaService.buscarPor(aluno.getTurma().getId());
+        if (turmaDTO == null) {
+            throw new IllegalArgumentException("A turma com id " + aluno.getTurma().getId() + " não existe.");
         }
 
         Aluno alunoSalvo = repository.buscarPor(aluno.getMatricula());
